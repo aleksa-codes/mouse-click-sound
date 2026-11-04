@@ -6,7 +6,7 @@ enum Sound: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .click: "Complete click"
+        case .click: "Click"
         case .press: "Press"
         case .release: "Release"
         }
