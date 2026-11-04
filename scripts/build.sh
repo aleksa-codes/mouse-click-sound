@@ -43,9 +43,15 @@ if [ "$MODE" = "--restart" ]; then
     open "$APP"
 fi
 if [ "$MODE" = "--package" ]; then
-    ZIP="$PWD/dist/Mouse Click Sound-macOS.zip"
+    STAGING="$PWD/.build/package/dmg"
+    DMG="$PWD/dist/Mouse-Click-Sound-macOS.dmg"
     mkdir -p "$PWD/dist"
-    rm -f "$ZIP"
-    ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP"
-    echo "Packaged ad-hoc-signed ZIP: $ZIP"
+    rm -rf "$STAGING"
+    mkdir -p "$STAGING"
+    ditto "$APP" "$STAGING/Mouse Click Sound.app"
+    ln -s /Applications "$STAGING/Applications"
+    rm -f "$DMG"
+    hdiutil create -volname "Mouse Click Sound" -srcfolder "$STAGING" -ov -format UDZO "$DMG"
+    rm -rf "$STAGING"
+    echo "Packaged ad-hoc-signed DMG: $DMG"
 fi

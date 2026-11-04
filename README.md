@@ -12,13 +12,13 @@
 
 ## Install
 
-Download the [latest release ZIP](https://github.com/aleksa-codes/mouse-click-sound/releases/latest/download/Mouse.Click.Sound-macOS.zip), unzip it, and move the app to Applications. Because it is not notarized, Control-click the app and choose **Open** the first time. Allow it under System Settings → Privacy & Security → Input Monitoring, then reopen if macOS asks.
+Download and open the [latest DMG](https://github.com/aleksa-codes/mouse-click-sound/releases/latest/download/Mouse-Click-Sound-macOS.dmg), then drag the app to Applications. Because it is not notarized, Control-click the app and choose **Open** the first time. Allow it under System Settings → Privacy & Security → Input Monitoring, then reopen if macOS asks.
 
 ## Develop
 
 Install Xcode Command Line Tools, then run `make run` to build and open the app. `make check` compiles the code and validates project metadata.
 
-`make package` creates an ad-hoc-signed ZIP locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
+`make package` creates an ad-hoc-signed DMG locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
 
 ## License
 
