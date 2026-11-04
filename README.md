@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Assets/app-icon.png" alt="Mouse Click Sound app icon" width="160">
+</p>
+
 # Mouse Click Sound
 
 A small macOS menu-bar app for tactile mouse clicks, taps, holds, and drags. Requires macOS 14 or later.
@@ -17,3 +21,7 @@ Open `dist/Mouse Click Sound-macOS.zip`, move the app to Applications, then open
 Install Xcode Command Line Tools, then run `make run` to build and open the app. `make check` compiles the code and validates project metadata.
 
 `make package` creates an ad-hoc-signed ZIP that can be attached to a GitHub Release. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
