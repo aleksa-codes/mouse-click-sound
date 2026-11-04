@@ -18,7 +18,7 @@ Download and open the [latest DMG](https://github.com/aleksa-codes/mouse-click-s
 
 Install Xcode Command Line Tools, then run `make run` to build and open the app. `make check` compiles the code and validates project metadata.
 
-`make package` creates an ad-hoc-signed DMG locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
+`make package` creates an ad-hoc-signed DMG and ZIP locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
 
 ## License
 

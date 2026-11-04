@@ -45,6 +45,7 @@ fi
 if [ "$MODE" = "--package" ]; then
     STAGING="$PWD/.build/package/dmg"
     DMG="$PWD/dist/Mouse-Click-Sound-macOS.dmg"
+    ZIP="$PWD/dist/Mouse-Click-Sound-macOS.zip"
     mkdir -p "$PWD/dist"
     rm -rf "$STAGING"
     mkdir -p "$STAGING"
@@ -53,5 +54,8 @@ if [ "$MODE" = "--package" ]; then
     rm -f "$DMG"
     hdiutil create -volname "Mouse Click Sound" -srcfolder "$STAGING" -ov -format UDZO "$DMG"
     rm -rf "$STAGING"
+    rm -f "$ZIP"
+    ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP"
     echo "Packaged ad-hoc-signed DMG: $DMG"
+    echo "Packaged ad-hoc-signed ZIP: $ZIP"
 fi
