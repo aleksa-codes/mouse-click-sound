@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/app-icon.png" alt="Mouse Click Sound app icon" width="160">
+  <img src="Assets/app-icon.png" alt="Mouse Click Sound app icon" width="80">
 </p>
 
 <h1 align="center">Mouse Click Sound</h1>
@@ -12,19 +12,13 @@
 
 ## Install
 
-Create the app ZIP:
-
-```sh
-make package
-```
-
-Open `dist/Mouse Click Sound-macOS.zip`, move the app to Applications, then open it. Because it is not notarized, Control-click the app and choose **Open** the first time. Allow it under System Settings → Privacy & Security → Input Monitoring, then reopen if macOS asks.
+Download the [latest release ZIP](https://github.com/aleksa-codes/mouse-click-sound/releases/latest/download/Mouse.Click.Sound-macOS.zip), unzip it, and move the app to Applications. Because it is not notarized, Control-click the app and choose **Open** the first time. Allow it under System Settings → Privacy & Security → Input Monitoring, then reopen if macOS asks.
 
 ## Develop
 
 Install Xcode Command Line Tools, then run `make run` to build and open the app. `make check` compiles the code and validates project metadata.
 
-`make package` creates an ad-hoc-signed ZIP that can be attached to a GitHub Release. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
+`make package` creates an ad-hoc-signed ZIP locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
 
 ## License
 
