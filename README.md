@@ -2,9 +2,13 @@
   <img src="Assets/app-icon.png" alt="Mouse Click Sound app icon" width="160">
 </p>
 
-# Mouse Click Sound
+<h1 align="center">Mouse Click Sound</h1>
 
-A small macOS menu-bar app for tactile mouse clicks, taps, holds, and drags. Requires macOS 14 or later.
+<p align="center">A small macOS menu-bar app for tactile mouse clicks, taps, holds, and drags. Requires macOS 14 or later.</p>
+
+<p align="center">
+  <img src="Assets/app-showcase.png" alt="Mouse Click Sound settings and menu bar controls" width="900">
+</p>
 
 ## Install
 
