@@ -13,6 +13,6 @@
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
-    <key>NSInputMonitoringUsageDescription</key><string>Listen for left mouse clicks to play tactile sounds. No keyboard input is monitored or recorded.</string>
+    <key>NSInputMonitoringUsageDescription</key><string>Listen for left and right mouse clicks to play tactile sounds. No keyboard input is monitored or recorded.</string>
 </dict>
 </plist>

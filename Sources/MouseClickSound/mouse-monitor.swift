@@ -10,7 +10,10 @@ final class MouseMonitor {
 
     func start() -> Bool {
         if tap != nil { return true }
-        let mask = [CGEventType.leftMouseDown, .leftMouseUp, .leftMouseDragged]
+        let mask = [
+            CGEventType.leftMouseDown, .leftMouseUp, .leftMouseDragged,
+            .rightMouseDown, .rightMouseUp, .rightMouseDragged,
+        ]
             .reduce(CGEventMask(0)) { $0 | (CGEventMask(1) << $1.rawValue) }
         let callback: CGEventTapCallBack = { _, type, event, context in
             // This tap's source is installed only on the main run loop.

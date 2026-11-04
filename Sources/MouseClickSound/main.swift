@@ -56,7 +56,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(quit)
         statusItem.menu = menu
         subscription = model.objectWillChange.sink { [weak self] _ in
-            DispatchQueue.main.async { self?.updateStatus() }
+            DispatchQueue.main.async {
+                self?.updateStatus()
+                self?.resizeSettingsWindowToFitContent()
+            }
         }
         updateStatus()
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSApplication.didBecomeActiveNotification, object: nil)
@@ -74,14 +77,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         statusItem?.button?.toolTip = model.monitoring ? "Mouse Click Sound: enabled" : "Mouse Click Sound: paused or permission needed"
     }
 
+    private func resizeSettingsWindowToFitContent() {
+        guard let window = settingsWindow, let contentView = window.contentView else { return }
+        contentView.layoutSubtreeIfNeeded()
+        let fittingSize = contentView.fittingSize
+        guard fittingSize.height > 0, abs(contentView.bounds.height - fittingSize.height) > 1 else { return }
+        window.setContentSize(NSSize(width: SettingsView.windowWidth, height: fittingSize.height))
+    }
+
     @objc private func toggleSounds() { model?.enabled.toggle() }
 
     @objc private func showSettings() {
         guard let model else { return }
         if settingsWindow == nil {
-            let window = NSWindow(contentRect: NSRect(origin: .zero, size: SettingsView.windowSize), styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
+            let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: SettingsView.windowWidth, height: 300), styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
             window.title = "Mouse Click Sound"
-            window.contentView = NSHostingView(rootView: SettingsView(model: model))
+            let contentView = NSHostingView(rootView: SettingsView(model: model))
+            contentView.sizingOptions = .intrinsicContentSize
+            window.contentView = contentView
+            window.setContentSize(contentView.fittingSize)
             window.isReleasedWhenClosed = false
             window.delegate = self
             window.center()

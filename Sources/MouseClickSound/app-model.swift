@@ -5,6 +5,11 @@ import ServiceManagement
 
 @MainActor
 final class AppModel: ObservableObject {
+    private enum MouseButton: Equatable {
+        case left
+        case right
+    }
+
     @Published var enabled: Bool {
         didSet {
             UserDefaults.standard.set(enabled, forKey: "enabled")
@@ -26,6 +31,7 @@ final class AppModel: ObservableObject {
     private let monitor = MouseMonitor()
     private var player: SoundPlayer?
     private var origin: CGPoint?
+    private var activeButton: MouseButton?
     private var pressed = false
     private var holdTimer: Timer?
 
@@ -65,12 +71,6 @@ final class AppModel: ObservableObject {
         NSWorkspace.shared.open(url)
     }
 
-    func revealApp() {
-        NSWorkspace.shared.activateFileViewerSelecting([Bundle.main.bundleURL])
-    }
-
-    var appPath: String { Bundle.main.bundlePath }
-
     func refreshLoginStatus() {
         let status = SMAppService.mainApp.status
         loginEnabled = status == .enabled || status == .requiresApproval
@@ -91,11 +91,13 @@ final class AppModel: ObservableObject {
 
     private func handle(_ type: CGEventType, at location: CGPoint, isOwnEvent: Bool) {
         guard enabled, monitoring, !menuOpen else { return }
+        guard let button = button(for: type) else { return }
         switch type {
-        case .leftMouseDown:
+        case .leftMouseDown, .rightMouseDown:
             resetGesture()
             // Do not add global sounds to this app's own preview controls.
             guard !isOwnEvent else { return }
+            activeButton = button
             origin = location
             // A short tap is one intact recording. Only a hold or drag
             // commits to separate sounds, so taps cannot stack the halves.
@@ -104,14 +106,22 @@ final class AppModel: ObservableObject {
             }
             holdTimer = timer
             RunLoop.main.add(timer, forMode: .common)
-        case .leftMouseDragged:
-            guard let origin else { return }
+        case .leftMouseDragged, .rightMouseDragged:
+            guard activeButton == button, let origin else { return }
             if hypot(location.x - origin.x, location.y - origin.y) >= 4 { beginHold() }
-        case .leftMouseUp:
-            guard origin != nil else { return }
+        case .leftMouseUp, .rightMouseUp:
+            guard activeButton == button, origin != nil else { return }
             player?.play(pressed ? .release : .click, volume: volume)
             resetGesture()
         default: break
+        }
+    }
+
+    private func button(for type: CGEventType) -> MouseButton? {
+        switch type {
+        case .leftMouseDown, .leftMouseDragged, .leftMouseUp: .left
+        case .rightMouseDown, .rightMouseDragged, .rightMouseUp: .right
+        default: nil
         }
     }
 
@@ -127,6 +137,7 @@ final class AppModel: ObservableObject {
         holdTimer?.invalidate()
         holdTimer = nil
         origin = nil
+        activeButton = nil
         pressed = false
     }
 
