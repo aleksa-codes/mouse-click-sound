@@ -38,6 +38,8 @@ cp Info.plist "$APP/Contents/Info.plist"
 cp Sources/MouseClickSound/Resources/* "$APP/Contents/Resources/"
 codesign --force --sign "$IDENTITY" --identifier codes.aleksa.mouse-click-sound "$APP"
 codesign --verify --strict "$APP"
+# Let IconServices notice icon changes inside an existing app bundle.
+touch "$APP"
 echo "Built: $APP"
 if [ "$MODE" = "--restart" ]; then
     open "$APP"

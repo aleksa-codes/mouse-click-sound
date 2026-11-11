@@ -103,19 +103,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         model.refreshLoginStatus()
         NSApp.setActivationPolicy(.regular)
-        updateDockIcon()
         NSApp.activate(ignoringOtherApps: true)
         if settingsWindow?.isMiniaturized == true { settingsWindow?.deminiaturize(nil) }
         settingsWindow?.makeKeyAndOrderFront(nil)
         settingsWindow?.makeFirstResponder(nil)
-    }
-
-    private func updateDockIcon() {
-        guard NSApp.activationPolicy() == .regular,
-              let iconURL = Bundle.main.url(forResource: "AppIcon", withExtension: "icns"),
-              let icon = NSImage(contentsOf: iconURL) else { return }
-        NSApp.applicationIconImage = icon
-        NSApp.dockTile.display()
     }
 
     func windowWillClose(_ notification: Notification) {
@@ -133,7 +124,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc private func refresh() {
         model?.refreshMonitoring()
         model?.refreshLoginStatus()
-        updateDockIcon()
     }
     @objc private func quit() { NSApp.terminate(nil) }
     func applicationWillTerminate(_ notification: Notification) { model?.suspend() }
