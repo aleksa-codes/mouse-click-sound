@@ -21,13 +21,19 @@ if [ "$IDENTITY" != "-" ] && ! security find-identity -v -p codesigning | grep -
     echo "Signing identity not found: $IDENTITY" >&2
     exit 1
 fi
+if [ "$MODE" != "--package" ]; then
+    CONTROL="$PWD/.build/app-control"
+    mkdir -p "$PWD/.build"
+    # The 6.4.3 interpreter cannot JIT-link AppKit; compile the helper instead.
+    swiftc scripts/app-control.swift -o "$CONTROL"
+fi
 if [ "$MODE" = "--build" ]; then
-    swift scripts/app-control.swift check "$APP"
+    "$CONTROL" check "$APP"
 fi
 swift build -c release
 BIN_DIR="$(swift build -c release --show-bin-path)"
 if [ "$MODE" = "--restart" ]; then
-    swift scripts/app-control.swift stop "$APP"
+    "$CONTROL" stop "$APP"
 fi
 if [ "$MODE" = "--package" ]; then
     rm -rf "$APP"

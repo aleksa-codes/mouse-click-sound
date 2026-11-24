@@ -4,7 +4,7 @@
 
 <h1 align="center">Mouse Click Sound</h1>
 
-<p align="center">A small macOS menu-bar app for tactile mouse clicks, taps, holds, and drags. Requires macOS 14 or later.</p>
+<p align="center">A small macOS menu-bar app for tactile mouse clicks, taps, holds, and drags. Requires macOS 15 or later.</p>
 
 <p align="center">
   <img src="Assets/app-showcase.png" alt="Mouse Click Sound settings and menu bar controls" width="900">
@@ -16,7 +16,7 @@ Download and open the [latest DMG](https://github.com/aleksa-codes/mouse-click-s
 
 ## Develop
 
-Install Xcode Command Line Tools, then run `make run` to build and open the app. `make check` compiles the code and validates project metadata.
+Install Xcode Command Line Tools and the [Swift 6.4.3 toolchain](https://www.swift.org/install/macos/), then run `make run` to build and open the app. `make check` compiles the code and validates project metadata. The Makefile selects the installed 6.4.3 toolchain; override `TOOLCHAINS` to use another one.
 
 `make package` creates an ad-hoc-signed DMG and ZIP locally. It does not require a paid Apple Developer account. Users approve the first launch and Input Monitoring permission in macOS.
 
