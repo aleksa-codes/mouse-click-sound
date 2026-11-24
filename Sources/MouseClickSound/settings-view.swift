@@ -4,7 +4,7 @@ import SwiftUI
 
 struct SettingsView: View {
     static let windowWidth: CGFloat = 420
-    @ObservedObject var model: AppModel
+    @Bindable var model: AppModel
 
     private var status: String {
         if !model.permissionGranted { return "Input Monitoring needed" }

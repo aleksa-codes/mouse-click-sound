@@ -1,39 +1,40 @@
 import AppKit
-import Combine
 import CoreGraphics
+import Observation
 import ServiceManagement
 
 @MainActor
-final class AppModel: ObservableObject {
+@Observable
+final class AppModel {
     private enum MouseButton: Equatable {
         case left
         case right
     }
 
-    @Published var enabled: Bool {
+    var enabled: Bool {
         didSet {
             UserDefaults.standard.set(enabled, forKey: "enabled")
             refreshMonitoring()
         }
     }
-    @Published var volume: Double {
+    var volume: Double {
         didSet { UserDefaults.standard.set(volume, forKey: "volume") }
     }
-    @Published private(set) var monitoring = false
-    @Published private(set) var permissionGranted = false
-    @Published private(set) var loginEnabled = false
-    @Published private(set) var loginNeedsApproval = false
-    @Published var errorMessage: String?
-    var menuOpen = false {
+    private(set) var monitoring = false
+    private(set) var permissionGranted = false
+    private(set) var loginEnabled = false
+    private(set) var loginNeedsApproval = false
+    var errorMessage: String?
+    @ObservationIgnored var menuOpen = false {
         didSet { if menuOpen { resetGesture() } }
     }
 
-    private let monitor = MouseMonitor()
-    private var player: SoundPlayer?
-    private var origin: CGPoint?
-    private var activeButton: MouseButton?
-    private var pressed = false
-    private var holdTimer: Timer?
+    @ObservationIgnored private let monitor = MouseMonitor()
+    @ObservationIgnored private var player: SoundPlayer?
+    @ObservationIgnored private var origin: CGPoint?
+    @ObservationIgnored private var activeButton: MouseButton?
+    @ObservationIgnored private var pressed = false
+    @ObservationIgnored private var holdTimer: Timer?
 
     init() {
         let defaults = UserDefaults.standard

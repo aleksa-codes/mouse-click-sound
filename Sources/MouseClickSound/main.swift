@@ -1,5 +1,5 @@
 import AppKit
-import Combine
+import Observation
 import SwiftUI
 
 @MainActor
@@ -7,7 +7,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var model: AppModel?
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
-    private var subscription: AnyCancellable?
     private let enableItem = NSMenuItem(title: "Enable sounds", action: #selector(toggleSounds), keyEquivalent: "")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -55,13 +54,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         quit.target = self
         menu.addItem(quit)
         statusItem.menu = menu
-        subscription = model.objectWillChange.sink { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.updateStatus()
-                self?.resizeSettingsWindowToFitContent()
-            }
-        }
         updateStatus()
+        observeModel()
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSApplication.didBecomeActiveNotification, object: nil)
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(sleep), name: NSWorkspace.willSleepNotification, object: nil)
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(refresh), name: NSWorkspace.didWakeNotification, object: nil)
@@ -75,6 +69,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         enableItem.state = model.enabled ? .on : .off
         statusItem?.button?.appearsDisabled = !model.monitoring
         statusItem?.button?.toolTip = model.monitoring ? "Mouse Click Sound: enabled" : "Mouse Click Sound: paused or permission needed"
+    }
+
+    private func observeModel() {
+        guard let model else { return }
+        withObservationTracking {
+            _ = model.enabled
+            _ = model.volume
+            _ = model.monitoring
+            _ = model.permissionGranted
+            _ = model.loginEnabled
+            _ = model.loginNeedsApproval
+            _ = model.errorMessage
+            updateStatus()
+            resizeSettingsWindowToFitContent()
+        } onChange: { [weak self] in
+            DispatchQueue.main.async { self?.observeModel() }
+        }
     }
 
     private func resizeSettingsWindowToFitContent() {
@@ -103,7 +114,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         model.refreshLoginStatus()
         NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
+        NSApp.activate()
         if settingsWindow?.isMiniaturized == true { settingsWindow?.deminiaturize(nil) }
         settingsWindow?.makeKeyAndOrderFront(nil)
         settingsWindow?.makeFirstResponder(nil)
